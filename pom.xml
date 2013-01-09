@@ -4,16 +4,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.destroystokyo.paper</groupId>
-        <artifactId>paper-parent</artifactId>
-        <version>dev-SNAPSHOT</version>
+        <groupId>com.empireminecraft</groupId>
+        <artifactId>empirecraft-parent</artifactId>
+        <version>1.13.1-R0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>paper-api</artifactId>
+    <artifactId>empirecraft-api</artifactId>
     <version>1.13.1-R0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Paper-API</name>
+    <name>EmpireCraft-API</name>
+
     <url>https://github.com/PaperMC/Paper</url>
     <description>An enhanced plugin API for Minecraft servers.</description>
 
