@@ -1,6 +1,7 @@
 package org.bukkit.entity;
 
 import org.bukkit.Chunk;
+import com.empireminecraft.api.meta.TempMetaMap;
 import org.bukkit.Location;
 import org.bukkit.EntityEffect;
 import org.bukkit.Nameable;
@@ -216,6 +217,7 @@ public interface Entity extends Metadatable, CommandSender, Nameable {
      */
     public Server getServer();
 
+    public TempMetaMap getTempMeta(); // EMC
     /**
      * Returns true if the entity gets persisted.
      * <p>

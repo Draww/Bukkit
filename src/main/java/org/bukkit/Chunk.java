@@ -1,5 +1,6 @@
 package org.bukkit;
 
+import com.empireminecraft.api.meta.TempMetaMap;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
@@ -111,6 +112,8 @@ public interface Chunk {
      */
     BlockState[] getTileEntities(boolean useSnapshot);
     // Paper end
+
+    TempMetaMap getTempMeta(); // EMC
 
     /**
      * Checks if the chunk is loaded.
