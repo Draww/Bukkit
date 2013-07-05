@@ -21,34 +21,51 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.empireminecraft.api;
+package com.empireminecraft.api.meta;
 
-import com.empireminecraft.api.meta.EAPI_Meta;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import com.google.common.collect.ForwardingMap;
 
-public abstract class API {
+import java.security.InvalidParameterException;
+import java.util.HashMap;
+import java.util.Map;
 
-    public static EAPI_Entity entity;
-    public static EAPI_Misc misc;
-    public static EAPI_Meta meta;
+/**
+ * A type protected hashmap for storing meta values
+ */
+@SuppressWarnings("PublicInnerClass")
+public class PersistentMetaMap extends ForwardingMap<String, Object> {
+    private Map<String, Object> backing;
 
-    public static String stack() {
-        return ExceptionUtils.getFullStackTrace(new Throwable());
+    @Override
+    protected Map<String, Object> delegate() {
+        if (backing == null) {
+            backing = new HashMap<>();
+        }
+        return backing;
     }
 
-    public static void exception(Throwable e) {
-        exception(null, e);
+    @Override
+    public Object put(String key, Object value) {
+        if (!Meta.isValidPersistentMeta(value)) {
+            throw new InvalidParameterException();
+        }
+        return super.put(key, value);
     }
 
-    public static void exception(String msg, Throwable e) {
-        if (msg != null) {
-            System.err.println(msg);
+    @Override
+    public void putAll(Map<? extends String, ?> map) {
+        for (Object value : map.values()) {
+            if (!Meta.isValidPersistentMeta(value)) {
+                throw new InvalidParameterException();
+            }
         }
-        if (e.getMessage() != null) {
-            System.err.println(e.getMessage());
-        }
-        for (String line : ExceptionUtils.getFullStackTrace(e).split("\n")) {
-            System.err.println(line);
-        }
+
+        super.putAll(map);
+    }
+
+    public PersistentMetaMap clone() {
+        PersistentMetaMap map = new PersistentMetaMap();
+        map.putAll(this);
+        return map;
     }
 }
