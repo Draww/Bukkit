@@ -139,6 +139,15 @@ public class ShapedRecipe implements Recipe, Keyed {
         return this;
     }
 
+    // Paper start
+    public ShapedRecipe setIngredient(char key, ItemStack item) {
+        Validate.isTrue(ingredients.containsKey(key), "Symbol does not appear in the shape:", key);
+
+        ingredients.put(key, new com.destroystokyo.paper.inventory.ItemStackRecipeChoice(item));
+        return this;
+    }
+    // Paper end
+
     /**
      * Get a copy of the ingredients map.
      *

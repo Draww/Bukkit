@@ -4,6 +4,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +27,10 @@ public class ItemStackRecipeChoice implements RecipeChoice {
     @Override
     public ItemStack getItemStack() {
         return choices.isEmpty() ? null : choices.get(0);
+    }
+
+    public List<ItemStack> getChoices() {
+        return Collections.unmodifiableList(choices);
     }
 
     @Override
