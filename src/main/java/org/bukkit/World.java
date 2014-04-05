@@ -533,6 +533,9 @@ public interface World extends PluginMessageRecipient, Metadatable {
      *     match one or more of the given classes/interfaces
      */
     public Collection<Entity> getEntitiesByClasses(Class<?>... classes);
+    public Collection<LivingEntity> getNearbyLivingEntities(Location loc, double x, double y, double z); // EMC
+    public Collection<Player> getNearbyPlayers(Location loc, double x, double y, double z); // EMC
+    public <T> Collection<T> getNearbyEntitiesByType(Class<? extends T> clazz, Location loc, double x, double y, double z); // EMC
 
     /**
      * Get a list of all players in this World
