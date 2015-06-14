@@ -491,6 +491,7 @@ public class Location implements Cloneable, ConfigurationSerializable {
         return this;
     }
 
+    public boolean isChunkLoaded() { return world.isChunkLoaded(locToBlock(x) >> 4, locToBlock(z) >> 4); } // EMC
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
