@@ -569,6 +569,7 @@ public interface Entity extends Metadatable, CommandSender, Nameable {
     @Override
     Spigot spigot();
     // Spigot end
+    public boolean reloadEntity(); // EMC
 
     // Paper start
     /**
