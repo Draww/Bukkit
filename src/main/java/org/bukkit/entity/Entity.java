@@ -124,6 +124,28 @@ public interface Entity extends Metadatable, CommandSender, Nameable {
      */
     public boolean teleport(Entity destination, TeleportCause cause);
 
+    // Paper start
+    /**
+     * Loads/Generates(in 1.13+) the Chunk asynchronously, and then teleports the entity when the chunk is ready.
+     * @param loc Location to teleport to
+     * @return A future that will be completed with the result of the teleport
+     */
+    public default java.util.concurrent.CompletableFuture<Boolean> teleportAsync(Location loc) {
+        return teleportAsync(loc, TeleportCause.PLUGIN);
+    }
+    /**
+     * Loads/Generates(in 1.13+) the Chunk asynchronously, and then teleports the entity when the chunk is ready.
+     * @param loc Location to teleport to
+     * @param cause Reason for teleport
+     * @return A future that will be completed with the result of the teleport
+     */
+    public default java.util.concurrent.CompletableFuture<Boolean> teleportAsync(Location loc, TeleportCause cause) {
+        java.util.concurrent.CompletableFuture<Boolean> future = new java.util.concurrent.CompletableFuture<>();
+        loc.getWorld().getChunkAtAsync(loc).thenAccept((chunk) -> future.complete(teleport(loc, cause)));
+        return future;
+    }
+    // Paper end
+
     /**
      * Returns a list of entities within a bounding box centered around this
      * entity
