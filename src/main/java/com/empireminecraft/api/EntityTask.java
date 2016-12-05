@@ -23,15 +23,21 @@
 
 package com.empireminecraft.api;
 
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 
-public interface EAPI_Entity {
+public abstract class EntityTask {
+    public int limit = -1;
+    public int count = 0;
 
-    byte[] serializeEntity(Entity craftentity);
-    Entity deserializeEntity(byte[] data, World world);
+    public EntityTask() {}
+    public EntityTask(int limit) {
+        this.limit = limit;
+    }
 
-    void cancelTasks(Entity entity);
-    EntityTask scheduleTask(Entity entity, int interval, Runnable task);
-    EntityTask scheduleTask(Entity entity, int interval, EntityTask task);
+    public abstract void run(Entity entity);
+
+    public void abort() {
+        this.limit = 1;
+        this.count = 1;
+    }
 }
