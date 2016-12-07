@@ -21,37 +21,18 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.empireminecraft.api;
+package com.empireminecraft.api.attributes;
 
-import com.empireminecraft.api.attributes.EAPI_Attributes;
-import com.empireminecraft.api.meta.EAPI_Meta;
-import org.apache.commons.lang.exception.ExceptionUtils;
-
-public abstract class API {
-
-    public static EAPI_Entity entity;
-    public static EAPI_Misc misc;
-    public static EAPI_Meta meta;
-    public static EAPI_Chat chat;
-    public static EAPI_Attributes attributes;
-
-    public static String stack() {
-        return ExceptionUtils.getFullStackTrace(new Throwable());
-    }
-
-    public static void exception(Throwable e) {
-        exception(null, e);
-    }
-
-    public static void exception(String msg, Throwable e) {
-        if (msg != null) {
-            System.err.println(msg);
-        }
-        if (e.getMessage() != null) {
-            System.err.println(e.getMessage());
-        }
-        for (String line : ExceptionUtils.getFullStackTrace(e).split("\n")) {
-            System.err.println(line);
-        }
-    }
+public enum Attribute {
+    TARGET_RANGE,
+    FOLLOW_RANGE,
+    MAX_HEALTH,
+    KNOCKBACK_RESISTANCE,
+    MOVEMENT_SPEED,
+    FLYING_SPEED,
+    ATTACK_DAMAGE,
+    ATTACK_SPEED,
+    ARMOR,
+    ARMOR_TOUGHNESS,
+    LUCK
 }
