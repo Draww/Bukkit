@@ -13,7 +13,7 @@ public interface EnderSignal extends Entity {
      * @return the {@link Location} this EnderSignal is moving towards.
      */
     public Location getTargetLocation();
-
+    // EMC start
     /**
      * Set the {@link Location} this EnderSignal is moving towards.
      * <br>
@@ -22,7 +22,11 @@ public interface EnderSignal extends Entity {
      *
      * @param location the new target location
      */
-    public void setTargetLocation(Location location);
+    public default void setTargetLocation(Location location) {
+        setTargetLocation(location, false);
+    }
+    public void setTargetLocation(Location location, boolean useExactTarget);
+    // EMC end
 
     /**
      * Gets if the EnderSignal should drop an item on death.<br>
