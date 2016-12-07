@@ -23,8 +23,22 @@
 
 package com.empireminecraft.api;
 
+import com.empireminecraft.api.attributes.Attribute;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Spider;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public interface EAPI_Entity {
 
@@ -34,4 +48,51 @@ public interface EAPI_Entity {
     void cancelTasks(Entity entity);
     EntityTask scheduleTask(Entity entity, int interval, Runnable task);
     EntityTask scheduleTask(Entity entity, int interval, EntityTask task);
+
+    boolean isEntityDisabled(org.bukkit.entity.Entity entity);
+    void setItemCanDespawn(Item item, boolean canDespawn);
+
+    /**
+     * Disables Ticking on an Entity
+     * @param entity
+     * @param disabled
+     */
+    void setDisabledEntity(org.bukkit.entity.Entity entity, boolean disabled);
+    int getLove(Animals animal);
+    void setLove(Animals animal, int love);
+
+    void setFireProof(Creature creature, boolean flag);
+    void setFirePanicProof(Creature creature, boolean flag);
+    void makeAggressive(Creature creature, float range);
+    void makeAggressiveDuringDay(Spider spider, boolean attack);
+
+    void makePeaceful(Creature creature);
+
+    void addGoalByName(LivingEntity creature, String goalName, boolean isTargetGoal, int tickRate, Class<?>[] argClasses, Object... args);
+    void removeGoalByName(LivingEntity creature, String goalName);
+
+    void setEntitySize(org.bukkit.entity.Entity entity, float width, float height);
+
+    void setTargetRange(LivingEntity entity, float range);
+
+    void setArrowAttackRange(Monster monster, float range);
+    void setArrowAttackSpeed(Monster monster, Integer min, Integer max);
+
+    void setEntityMaxPathfindingRange(Creature creature, float range);
+
+    int getDisabledSlots(ArmorStand armorStand);
+    void setDisabledSlots(ArmorStand armorStand, int i);
+
+    void respawnEntity(org.bukkit.entity.Entity entity);
+
+    void setEnderSignalLife(EnderSignal enderSignal, int lifeTime);
+    int getEnderSignalLife(EnderSignal enderSignal);
+
+    void setEnderSignalDestination(EnderSignal enderSignal, Location target);
+
+    boolean hasEntityPath(Creature entity);
+
+    Location getEntityPathDestination(Creature entity);
+    boolean setEntityDestination(Creature entity, Location loc);
+    boolean setEntityDestination(Creature entity, LivingEntity target);
 }
