@@ -21,29 +21,45 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.empireminecraft.api;
+package com.empireminecraft.customevents;
 
-import org.bukkit.Location;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
+public class CreatePendingTreasureMapEvent extends Event {
+    private final String mapType;
+    private final int iconTypeId;
+    private ItemStack item;
 
-public interface EAPI_Misc {
+    public CreatePendingTreasureMapEvent(String mapType, int iconTypeId) {
+        this.mapType = mapType;
+        this.iconTypeId = iconTypeId;
+    }
 
-    /**
-     *
-     * @param structure
-     * @param center
-     * @param undiscoveredOnly
-     * @return
-     */
-    Location findNearestStructure(@Nonnull String structure, @Nonnull Location center, int radius);
+    public String getMapType() {
+        return mapType;
+    }
 
-    /**
-     *
-     * @param mapType
-     * @param loc
-     * @return
-     */
-    ItemStack createTreasureMap(@Nonnull String mapType, int iconType, @Nonnull Location loc);
+    public int getIconTypeId() {
+        return iconTypeId;
+    }
+
+    public ItemStack getItem() {
+        return item;
+    }
+
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
+
+    private static final HandlerList handlers = new HandlerList();
+
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }
