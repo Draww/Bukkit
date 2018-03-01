@@ -41,6 +41,8 @@ class TimingHandler implements Timing {
 
     final TimingData record;
     private final TimingHandler groupHandler;
+    private TimingRegionProvider regionProvider;
+    private TimingRegion region;
 
     private long start = 0;
     private int timingDepth = 0;
@@ -82,6 +84,10 @@ class TimingHandler implements Timing {
         }
     }
 
+    public void setRegionProvider(TimingRegionProvider regionProvider) {
+        this.regionProvider = regionProvider;
+    }
+
     @Override
     public Timing startTimingIfSync() {
         if (Bukkit.isPrimaryThread()) {
@@ -99,6 +105,9 @@ class TimingHandler implements Timing {
 
     public Timing startTiming() {
         if (enabled && ++timingDepth == 1) {
+            if (this.regionProvider != null) {
+                this.region = this.regionProvider.getTimingRegion();
+            }
             start = System.nanoTime();
             parent = TimingsManager.CURRENT;
             TimingsManager.CURRENT = this;
@@ -115,6 +124,7 @@ class TimingHandler implements Timing {
                 return;
             }
             addDiff(System.nanoTime() - start);
+            region = null;
             start = 0;
         }
     }
@@ -138,6 +148,9 @@ class TimingHandler implements Timing {
             added = true;
             timed = true;
             TimingsManager.HANDLERS.add(this);
+        }
+        if (region != null) {
+            region.add(this, diff);
         }
         if (groupHandler != null) {
             groupHandler.addDiff(diff);

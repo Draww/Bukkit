@@ -65,8 +65,10 @@ public class FullServerTickHandler extends TimingHandler {
 
 
         if (TimingHistory.timedTicks % 1200 == 0) {
+            TimingRegions.calculateCounts();
             MINUTE_REPORTS.add(new TimingHistory.MinuteReport());
             TimingHistory.resetTicks(false);
+
             minuteData.reset();
         }
         if (TimingHistory.timedTicks % Timings.getHistoryInterval() == 0) {

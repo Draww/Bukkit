@@ -38,20 +38,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public final class TimingsManager {
     static final Map<TimingIdentifier, TimingHandler> TIMING_MAP =
         Collections.synchronizedMap(LoadingMap.newHashMap(
-            new Function<TimingIdentifier, TimingHandler>() {
-                @Override
-                public TimingHandler apply(TimingIdentifier id) {
-                    return (id.protect ?
-                        new UnsafeTimingHandler(id) :
-                        new TimingHandler(id)
-                    );
-                }
-            },
+            (Function<TimingIdentifier, TimingHandler>) id -> (Objects.requireNonNull(id).protect ?
+                new UnsafeTimingHandler(id) :
+                new TimingHandler(id)
+            ),
             256, .5F
         ));
     public static final FullServerTickHandler FULL_SERVER_TICK = new FullServerTickHandler();
@@ -132,6 +128,9 @@ public final class TimingsManager {
             for (TimingHandler timings : HANDLERS) {
                 timings.reset(false);
             }
+        }
+        for (TimingRegion timingRegion : TimingRegions.REGIONS.values()) {
+            timingRegion.reset();
         }
 
         HANDLERS.clear();

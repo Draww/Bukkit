@@ -23,25 +23,18 @@
  */
 package co.aikar.timings;
 
-import co.aikar.timings.TimingHistory.RegionData.RegionId;
-import co.aikar.util.JSONUtil;
+import co.aikar.util.Counter;
 import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.BlockState;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import co.aikar.util.LoadingMap;
-import co.aikar.util.MRUMapCache;
 
 import java.lang.management.ManagementFactory;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,40 +91,17 @@ public class TimingHistory {
             entries[i++] = new TimingHistoryEntry(handler);
         }
 
-
         // Information about all loaded chunks/entities
         //noinspection unchecked
         this.worlds = toObjectMapper(Bukkit.getWorlds(), new Function<World, JSONPair>() {
             @Override
             public JSONPair apply(World world) {
-                Map<RegionId, RegionData> regions = LoadingMap.newHashMap(RegionData.LOADER);
-
-                for (Chunk chunk : world.getLoadedChunks()) {
-                    RegionData data = regions.get(new RegionId(chunk.getX(), chunk.getZ()));
-
-                    for (Entity entity : chunk.getEntities()) {
-                        if (entity == null) {
-                            Bukkit.getLogger().warning("Null entity detected in chunk at position x: " + chunk.getX() + ", z: " + chunk.getZ());
-                            continue;
-                        }
-
-                        data.entityCounts.get(entity.getType()).increment();
-                    }
-
-                    for (BlockState tileEntity : chunk.getTileEntities()) {
-                        if (tileEntity == null) {
-                            Bukkit.getLogger().warning("Null tileentity detected in chunk at position x: " + chunk.getX() + ", z: " + chunk.getZ());
-                            continue;
-                        }
-
-                        data.tileEntityCounts.get(tileEntity.getBlock().getType()).increment();
-                    }
-                }
+                Map<TimingRegionId, TimingRegion> regions = TimingRegions.REGIONS.row(world.getUID());
                 return pair(
                     worldMap.get(world.getName()),
-                    toArrayMapper(regions.values(),new Function<RegionData, Object>() {
+                    toArrayMapper(regions.values(),new Function<TimingRegion, Object>() {
                         @Override
-                        public Object apply(RegionData input) {
+                        public Object apply(TimingRegion input) {
                             return toArray(
                                 input.regionId.x,
                                 input.regionId.z,
@@ -166,74 +136,7 @@ public class TimingHistory {
             }
         });
     }
-    static class RegionData {
-        final RegionId regionId;
-        @SuppressWarnings("Guava")
-        static Function<RegionId, RegionData> LOADER = new Function<RegionId, RegionData>() {
-            @Override
-            public RegionData apply(RegionId id) {
-                return new RegionData(id);
-            }
-        };
-        RegionData(RegionId id) {
-            this.regionId = id;
-        }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            RegionData that = (RegionData) o;
-
-            return regionId.equals(that.regionId);
-
-        }
-
-        @Override
-        public int hashCode() {
-            return regionId.hashCode();
-        }
-
-        @SuppressWarnings("unchecked")
-        final Map<EntityType, Counter> entityCounts = MRUMapCache.of(LoadingMap.of(
-                new EnumMap<EntityType, Counter>(EntityType.class), Counter.LOADER
-        ));
-        @SuppressWarnings("unchecked")
-        final Map<Material, Counter> tileEntityCounts = MRUMapCache.of(LoadingMap.of(
-                new EnumMap<Material, Counter>(Material.class), Counter.LOADER
-        ));
-
-        static class RegionId {
-            final int x, z;
-            final long regionId;
-            RegionId(int x, int z) {
-                this.x = x >> 5 << 5;
-                this.z = z >> 5 << 5;
-                this.regionId = ((long) (this.x) << 32) + (this.z >> 5 << 5) - Integer.MIN_VALUE;
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
-
-                RegionId regionId1 = (RegionId) o;
-
-                return regionId == regionId1.regionId;
-
-            }
-
-            @Override
-            public int hashCode() {
-                return (int) (regionId ^ (regionId >>> 32));
-            }
-        }
-    }
     static void resetTicks(boolean fullReset) {
         if (fullReset) {
             // Non full is simply for 1 minute reports
@@ -333,20 +236,4 @@ public class TimingHistory {
     }
 
 
-    private static class Counter {
-        private int count = 0;
-        @SuppressWarnings({"rawtypes", "SuppressionAnnotation", "Guava"})
-        static Function LOADER = new LoadingMap.Feeder<Counter>() {
-            @Override
-            public Counter apply() {
-                return new Counter();
-            }
-        };
-        public int increment() {
-            return ++count;
-        }
-        public int count() {
-            return count;
-        }
-    }
 }
