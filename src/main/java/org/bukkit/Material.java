@@ -72,6 +72,7 @@ import org.bukkit.material.MaterialData;
 /**
  * An enum of all material IDs accepted by the official server and client
  */
+@SuppressWarnings({"DeprecatedIsStillUsed", "deprecation"})
 public enum Material implements Keyed {
     //<editor-fold desc="Materials" defaultstate="collapsed">
     ACACIA_BOAT(27326, 1),
