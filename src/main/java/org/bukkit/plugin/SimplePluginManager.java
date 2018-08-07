@@ -104,6 +104,7 @@ public final class SimplePluginManager implements PluginManager {
      * @return A list of all plugins loaded
      */
     public Plugin[] loadPlugins(File directory) {
+        File verDir = new File(directory, "1.13"); // EMC
         Validate.notNull(directory, "Directory cannot be null");
         Validate.isTrue(directory.isDirectory(), "Directory must be a directory");
 
@@ -121,6 +122,16 @@ public final class SimplePluginManager implements PluginManager {
 
         // This is where it figures out all possible plugins
         for (File file : directory.listFiles()) {
+            // EMC start
+            File verFile = new File(verDir, file.getName());
+            if (verFile.exists() && verFile.canRead()) {
+                file = verFile;
+            } else if (new File(directory, file.getName() + ".disabled").exists()) {
+                continue;
+            }
+            if (!file.canRead()) continue;
+            // EMC end
+
             PluginLoader loader = null;
             for (Pattern filter : filters) {
                 Matcher match = filter.matcher(file.getName());
