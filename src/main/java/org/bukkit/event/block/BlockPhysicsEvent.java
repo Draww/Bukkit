@@ -29,10 +29,34 @@ public class BlockPhysicsEvent extends BlockEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final BlockData changed;
     private boolean cancel = false;
+    // Paper start - add source block
+    private int sourceX;
+    private int sourceY;
+    private int sourceZ;
+    private Block sourceBlock;
+
+    public BlockPhysicsEvent(final Block block, final BlockData changed, final int sourceX, final int sourceY, final int sourceZ) {
+        this(block, changed);
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
+        this.sourceZ = sourceZ;
+        this.sourceBlock = null;
+    }
+
+    /**
+     * Gets the source block, causing this event
+     *
+     * @return Source block
+     */
+    public Block getSourceBlock() {
+        return sourceBlock == null ? (sourceBlock = block.getWorld().getBlockAt(sourceX, sourceY, sourceZ)) : sourceBlock;
+    }
+    // Paper end
 
     public BlockPhysicsEvent(final Block block, final BlockData changed) {
         super(block);
         this.changed = changed;
+        this.sourceBlock = block; // Paper - add source block
     }
 
     /**
