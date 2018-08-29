@@ -194,6 +194,16 @@ public interface World extends PluginMessageRecipient, Metadatable {
     }
 
     /**
+     * Checks if a chunk is force-loaded.
+     * Note: This will only return true if the chunk is also generated
+     *
+     * @param x X-coordinate of the chunk
+     * @param z Z-coordinate of the chunk
+     * @return true if the chunk is force-loaded. otherwise false
+     */
+    public boolean isChunkForceLoaded(int x, int z);
+
+    /**
      * This is the Legacy API before Java 8 was supported. Java 8 Consumer is provided,
      * as well as future support
      *

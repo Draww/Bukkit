@@ -168,4 +168,20 @@ public interface Chunk {
      * @return true if slimes are able to spawn in this chunk
      */
     boolean isSlimeChunk();
+
+    // Paper start - Force-Loaded Chunk API
+    /**
+     * Checks if the chunk is currently force-loaded
+     *
+     * @return true if the chunk is force-loaded, otherwise false
+     */
+    boolean isForceLoaded();
+
+    /**
+     * Set's whether a chunk is force-loaded or not
+     *
+     * @param force whether or not to force load this chunk
+     */
+    void setForceLoaded(boolean force);
+    // Paper end
 }
