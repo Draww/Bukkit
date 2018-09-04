@@ -1909,6 +1909,26 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
      * @param profile The new profile to use
      */
     void setPlayerProfile(PlayerProfile profile);
+
+    /**
+     * Returns the amount of ticks the current cooldown lasts
+     *
+     * @return Amount of ticks cooldown will last
+     */
+    float getCooldownPeriod();
+
+    /**
+     * Returns the percentage of attack power available based on the cooldown (zero to one).
+     *
+     * @param adjustTicks Amount of ticks to add to cooldown counter for this calculation
+     * @return Percentage of attack power available
+     */
+    float getCooledAttackStrength(float adjustTicks);
+
+    /**
+     * Reset the cooldown counter to 0, effectively starting the cooldown period.
+     */
+    void resetCooldown();
     // Paper end
 
     // Spigot start
