@@ -7,6 +7,14 @@ import org.bukkit.loot.Lootable;
  */
 public interface Mob extends LivingEntity, Lootable {
 
+    // Paper start
+    /**
+     * Enables access to control the pathing of an Entity
+     * @return Pathfinding Manager for this entity
+     */
+    com.destroystokyo.paper.entity.Pathfinder getPathfinder();
+    // Paper end
+
     /**
      * Instructs this Mob to set the specified LivingEntity as its target.
      * <p>
