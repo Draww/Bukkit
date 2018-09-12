@@ -350,4 +350,33 @@ public interface ItemMeta extends Cloneable, ConfigurationSerializable {
 
     Spigot spigot();
     // Spigot end
+    // Paper start - Add an API for CanPlaceOn and CanDestroy NBT values
+    /**
+     * Gets set of materials what given item can destroy in {@link org.bukkit.GameMode#ADVENTURE}
+     *
+     * @return Set of materials
+     */
+    Set<org.bukkit.Material> getCanDestroy();
+
+    /**
+     * Sets set of materials what given item can destroy in {@link org.bukkit.GameMode#ADVENTURE}
+     *
+     * @param canDestroy Set of materials
+     */
+    void setCanDestroy(Set<org.bukkit.Material> canDestroy);
+
+    /**
+     * Gets set of materials where given item can be placed on in {@link org.bukkit.GameMode#ADVENTURE}
+     *
+     * @return Set of materials
+     */
+    Set<org.bukkit.Material> getCanPlaceOn();
+
+    /**
+     * Sets set of materials where given item can be placed on in {@link org.bukkit.GameMode#ADVENTURE}
+     *
+     * @param canPlaceOn Set of materials
+     */
+    void setCanPlaceOn(Set<org.bukkit.Material> canPlaceOn);
+    // Paper end
 }
